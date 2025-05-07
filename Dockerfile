@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/ap
 WORKDIR /workspace
 
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm ci
 COPY . .
 RUN npx prisma generate
 RUN chmod +x entrypoint.sh

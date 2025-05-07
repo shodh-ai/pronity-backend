@@ -25,6 +25,7 @@ model Component {
     id             String          @id @default(uuid()) @db.Uuid
     type           String
     level          Int
+    content        String
     flowComponents FlowComponent[]
 }
 
@@ -87,13 +88,15 @@ model Report {
 }
 
 model Comment {
-    id        String   @id @default(uuid()) @db.Uuid
-    reportId  String   @db.Uuid
-    wrongText String
-    rightText String
-    info      String
-    date      DateTime @default(now())
-    report    Report   @relation(fields: [reportId], references: [id])
+    id         String   @id @default(uuid()) @db.Uuid
+    reportId   String   @db.Uuid
+    startIndex Int
+    endIndex   Int
+    wrongText  String
+    rightText  String
+    info       String
+    date       DateTime @default(now())
+    report     Report   @relation(fields: [reportId], references: [id])
 }
 
 model Word {

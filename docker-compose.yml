@@ -4,6 +4,7 @@ services:
       context: .
     volumes:
       - .:/workspace
+      - /workspace/node_modules
     depends_on:
       - db
     environment:

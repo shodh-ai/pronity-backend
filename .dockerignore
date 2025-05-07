@@ -1,0 +1,8 @@
+node_modules/
+dist/
+build/
+.git/
+.vscode/
+.gitignore
+.DS_Store
+Thumbs.db

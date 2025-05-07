@@ -61,6 +61,8 @@ CREATE TABLE reports (
 CREATE TABLE comments (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     reportId UUID REFERENCES reports(id),
+    startIndex INT NOT NULL,
+    endIndex INT NOT NULL,
     wrongText TEXT NOT NULL,
     rightText TEXT NOT NULL,
     info TEXT NOT NULL,
