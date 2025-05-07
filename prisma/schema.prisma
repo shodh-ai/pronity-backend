@@ -1,0 +1,115 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Auth {
+    id       String @id @default(uuid()) @db.Uuid
+    email    String @unique
+    password String
+    user     User?
+}
+
+model Flow {
+    id             String          @id @default(uuid()) @db.Uuid
+    lastCompleted  Int             @default(0)
+    user           User?
+    flowComponents FlowComponent[]
+}
+
+model Component {
+    id             String          @id @default(uuid()) @db.Uuid
+    type           String
+    level          Int
+    flowComponents FlowComponent[]
+}
+
+model FlowComponent {
+    id          String    @id @default(uuid()) @db.Uuid
+    flowId      String    @db.Uuid
+    componentId String    @db.Uuid
+    order       Int
+    flow        Flow      @relation(fields: [flowId], references: [id])
+    component   Component @relation(fields: [componentId], references: [id])
+
+    @@unique([flowId, componentId, order])
+}
+
+model User {
+    id             String     @id @db.Uuid
+    firstName      String
+    lastName       String
+    occupation     String
+    major          String
+    nativeLanguage String
+    flowId         String?    @unique @db.Uuid
+    createdAt      DateTime   @default(now())
+    auth           Auth?      @relation(fields: [id], references: [id])
+    flow           Flow?      @relation(fields: [flowId], references: [id])
+    userInterests  Interest[] @relation("UserInterests")
+    userTopics     Topic[]    @relation("UserTopics")
+    reports        Report[]
+    userWords      Word[]     @relation("UserWords")
+    userNotes      Note[]
+}
+
+model Interest {
+    id            String @id @default(uuid()) @db.Uuid
+    name          String
+    userInterests User[] @relation("UserInterests")
+}
+
+model Topic {
+    id         String   @id @default(uuid()) @db.Uuid
+    field      String
+    topicName  String
+    level      Int
+    userTopics User[]   @relation("UserTopics")
+    reports    Report[]
+
+    @@unique([field, topicName])
+}
+
+model Report {
+    id       String    @id @default(uuid()) @db.Uuid
+    topicId  String    @db.Uuid
+    userId   String    @db.Uuid
+    date     DateTime  @default(now())
+    type     String
+    userText String
+    user     User      @relation(fields: [userId], references: [id])
+    topic    Topic     @relation(fields: [topicId], references: [id])
+    comments Comment[]
+}
+
+model Comment {
+    id        String   @id @default(uuid()) @db.Uuid
+    reportId  String   @db.Uuid
+    wrongText String
+    rightText String
+    info      String
+    date      DateTime @default(now())
+    report    Report   @relation(fields: [reportId], references: [id])
+}
+
+model Word {
+    id        String   @id @default(uuid()) @db.Uuid
+    word      String
+    meaning   String
+    example   String
+    date      DateTime @default(now())
+    userWords User[]   @relation("UserWords")
+}
+
+model Note {
+    id      String   @id @default(uuid()) @db.Uuid
+    userId  String   @db.Uuid
+    heading String
+    content String
+    date    DateTime @default(now())
+    user    User     @relation(fields: [userId], references: [id])
+}
