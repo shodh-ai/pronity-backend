@@ -5,5 +5,7 @@ export default interface UserDTO {
     occupation: string;
     major: string;
     nativeLanguage: string;
+    flow: string;
+    interests: string[];
     createdAt: Date;
 }
