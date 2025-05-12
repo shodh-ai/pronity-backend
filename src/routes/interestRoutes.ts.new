@@ -1,0 +1,15 @@
+import { Router } from 'express';
+
+import { getAllInterests, getUserInterests, addInterest, deleteInterest } from '../controllers/interestController.js';
+
+const router = Router();
+
+// Admin route to get all interests in the system
+router.get('/all', getAllInterests);
+
+// User-specific interests routes
+router.get('/user', getUserInterests);
+router.post('/add', addInterest);
+router.delete('/delete', deleteInterest);
+
+export default router;
