@@ -14,6 +14,7 @@ import interestRoutes from './routes/interestRoutes.js';
 import topicRoutes from './routes/topicRoutes.js';
 import wordRoutes from './routes/wordRoutes.js';
 import speakingRoutes from './routes/speakingRoutes.js';
+import userStatusRoutes from './routes/userStatusRoutes.js';
 
 dotenv.config({ path: path.resolve('.env') });
 
@@ -54,6 +55,7 @@ app.use('/interest', interestRoutes);
 app.use('/topic', topicRoutes);
 app.use('/word', wordRoutes);
 app.use('/speaking', speakingRoutes);
+app.use('/status', userStatusRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
