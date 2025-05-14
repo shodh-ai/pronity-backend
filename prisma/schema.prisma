@@ -30,9 +30,9 @@ model Component {
 }
 
 model FlowComponent {
-    id          String    @id @default(uuid()) @db.Uuid
-    flowId      String    @db.Uuid
-    componentId String    @db.Uuid
+    id          String    @id @default(uuid()) 
+    flowId      String    
+    componentId String    
     order       Int
     flow        Flow      @relation(fields: [flowId], references: [id])
     component   Component @relation(fields: [componentId], references: [id])
@@ -41,13 +41,13 @@ model FlowComponent {
 }
 
 model User {
-    id             String     @id @db.Uuid
+    id             String     @id 
     firstName      String
     lastName       String
     occupation     String
     major          String
     nativeLanguage String
-    flowId         String?    @unique @db.Uuid
+    flowId         String?    @unique 
     createdAt      DateTime   @default(now())
     auth           Auth?      @relation(fields: [id], references: [id])
     flow           Flow?      @relation(fields: [flowId], references: [id])
@@ -56,6 +56,7 @@ model User {
     reports        Report[]
     userWords      Word[]     @relation("UserWords")
     userNotes      Note[]
+    userStatus     UserStatus?
 }
 
 model Interest {
@@ -100,7 +101,7 @@ model Comment {
 }
 
 model Word {
-  id        String   @id @default(uuid()) @db.Uuid
+  id        String   @id @default(uuid()) 
   word      String
   meaning   String
   example   String
@@ -109,8 +110,8 @@ model Word {
 }
 
 model Note {
-    id      String   @id @default(uuid()) @db.Uuid
-    userId  String   @db.Uuid
+    id      String   @id @default(uuid()) 
+    userId  String   
     heading String
     content String
     date    DateTime @default(now())
@@ -118,8 +119,8 @@ model Note {
 }
 
 model UserStatus {
-  id        String   @id @default(uuid()) @db.Uuid
-  userId    String   @unique @db.Uuid
+  id        String   @id @default(uuid()) 
+  userId    String   @unique 
   speaking  Int      @default(0)
   writing   Int      @default(0)
   listening Int      @default(0)

@@ -4,7 +4,9 @@ import { Response } from 'express';
 // Simple mock data for testing
 const mockTopics = [
   { id: 'topic1', topicName: 'Computer Science', field: 'Technology', level: 2 },
-  { id: 'topic2', topicName: 'Mathematics', field: 'Science', level: 1 },
+  { id: 'topic2', topicName: 'Mathematics', fieldadfg
+    asdfg
+    : 'Science', level: 1 },
   { id: 'topic3', topicName: 'Physics', field: 'Science', level: 3 }
 ];
 
