@@ -3,26 +3,26 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model Auth {
-  id       String @id @default(uuid()) @db.Uuid
+  id       String @id @default(uuid())
   email    String @unique
   password String
   user     User?
 }
 
 model Flow {
-  id             String          @id @default(uuid()) @db.Uuid
+  id             String          @id @default(uuid())
   lastCompleted  Int             @default(0)
   flowComponents FlowComponent[]
   user           User?
 }
 
 model Component {
-  id             String          @id @default(uuid()) @db.Uuid
+  id             String          @id @default(uuid())
   type           String
   level          Int
   content        String?
@@ -30,56 +30,55 @@ model Component {
 }
 
 model FlowComponent {
-  id          String    @id @default(uuid()) @db.Uuid
-  flowId      String    @db.Uuid
-  componentId String    @db.Uuid
-  order       Int
-  component   Component @relation(fields: [componentId], references: [id])
-  flow        Flow      @relation(fields: [flowId], references: [id])
+    id          String    @id @default(uuid()) @db.Uuid
+    flowId      String    @db.Uuid
+    componentId String    @db.Uuid
+    order       Int
+    flow        Flow      @relation(fields: [flowId], references: [id])
+    component   Component @relation(fields: [componentId], references: [id])
 
   @@unique([flowId, componentId, order])
 }
 
 model User {
-  id             String      @id @db.Uuid
-  firstName      String
-  lastName       String
-  occupation     String
-  major          String
-  nativeLanguage String
-  flowId         String?     @unique @db.Uuid
-  createdAt      DateTime    @default(now())
-  userNotes      Note[]
-  reports        Report[]
-  flow           Flow?       @relation(fields: [flowId], references: [id])
-  auth           Auth        @relation(fields: [id], references: [id])
-  status         UserStatus?
-  userInterests  Interest[]  @relation("UserInterests")
-  userTopics     Topic[]     @relation("UserTopics")
-  userWords      Word[]      @relation("UserWords")
+    id             String     @id @db.Uuid
+    firstName      String
+    lastName       String
+    occupation     String
+    major          String
+    nativeLanguage String
+    flowId         String?    @unique @db.Uuid
+    createdAt      DateTime   @default(now())
+    auth           Auth?      @relation(fields: [id], references: [id])
+    flow           Flow?      @relation(fields: [flowId], references: [id])
+    userInterests  Interest[] @relation("UserInterests")
+    userTopics     Topic[]    @relation("UserTopics")
+    reports        Report[]
+    userWords      Word[]     @relation("UserWords")
+    userNotes      Note[]
 }
 
 model Interest {
-  id            String @id @default(uuid()) @db.Uuid
-  name          String
-  userInterests User[] @relation("UserInterests")
+    id            String @id @default(uuid())
+    name          String
+    userInterests User[] @relation("UserInterests")
 }
 
 model Topic {
-  id         String   @id @default(uuid()) @db.Uuid
-  field      String
-  topicName  String
-  level      Int
-  reports    Report[]
-  userTopics User[]   @relation("UserTopics")
+    id         String   @id @default(uuid())
+    field      String
+    topicName  String
+    level      Int
+    userTopics User[]   @relation("UserTopics")
+    reports    Report[]
 
   @@unique([field, topicName])
 }
 
 model Report {
-  id       String    @id @default(uuid()) @db.Uuid
-  topicId  String    @db.Uuid
-  userId   String    @db.Uuid
+  id       String    @id @default(uuid())
+  topicId  String
+  userId   String
   date     DateTime  @default(now())
   type     String
   userText String
@@ -89,8 +88,8 @@ model Report {
 }
 
 model Comment {
-  id         String   @id @default(uuid()) @db.Uuid
-  reportId   String   @db.Uuid
+  id         String   @id @default(uuid())
+  reportId   String
   startIndex Int
   endIndex   Int
   wrongText  String
@@ -110,12 +109,12 @@ model Word {
 }
 
 model Note {
-  id      String   @id @default(uuid()) @db.Uuid
-  userId  String   @db.Uuid
-  heading String
-  content String
-  date    DateTime @default(now())
-  user    User     @relation(fields: [userId], references: [id])
+    id      String   @id @default(uuid()) @db.Uuid
+    userId  String   @db.Uuid
+    heading String
+    content String
+    date    DateTime @default(now())
+    user    User     @relation(fields: [userId], references: [id])
 }
 
 model UserStatus {
