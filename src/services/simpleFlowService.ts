@@ -4,16 +4,15 @@ import { Response } from 'express';
 // Simple mock data for testing
 const mockTopics = [
   { id: 'topic1', topicName: 'Computer Science', field: 'Technology', level: 2 },
-  { id: 'topic2', topicName: 'Mathematics', fieldadfg
-    asdfg
-    : 'Science', level: 1 },
+  { id: 'topic2', topicName: 'Mathematics', field: 'Science', level: 1 },
   { id: 'topic3', topicName: 'Physics', field: 'Science', level: 3 }
 ];
 
 const mockComponents = [
+  // Speaking task first to prioritize testing with letsspeak page
+  { id: 'comp3', type: 'speaking', level: 3, content: 'Speaking practice for Physics' },
   { id: 'comp1', type: 'reading', level: 1, content: 'Reading practice for Computer Science' },
   { id: 'comp2', type: 'writing', level: 2, content: 'Writing practice for Mathematics' },
-  { id: 'comp3', type: 'speaking', level: 3, content: 'Speaking practice for Physics' },
   { id: 'vocab1', type: 'vocab', level: 1, content: 'Vocabulary practice for Computer Science' }
 ];
 

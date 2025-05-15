@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -30,48 +31,50 @@ model Component {
 }
 
 model FlowComponent {
-    id          String    @id @default(uuid()) 
-    flowId      String    
-    componentId String    
-    order       Int
-    flow        Flow      @relation(fields: [flowId], references: [id])
-    component   Component @relation(fields: [componentId], references: [id])
+  id          String    @id @default(uuid())
+  flowId      String
+  componentId String
+  order       Int
+  flow        Flow      @relation(fields: [flowId], references: [id])
+  component   Component @relation(fields: [componentId], references: [id])
 
   @@unique([flowId, componentId, order])
 }
 
 model User {
-    id             String     @id 
-    firstName      String
-    lastName       String
-    occupation     String
-    major          String
-    nativeLanguage String
-    flowId         String?    @unique 
-    createdAt      DateTime   @default(now())
-    auth           Auth?      @relation(fields: [id], references: [id])
-    flow           Flow?      @relation(fields: [flowId], references: [id])
-    userInterests  Interest[] @relation("UserInterests")
-    userTopics     Topic[]    @relation("UserTopics")
-    reports        Report[]
-    userWords      Word[]     @relation("UserWords")
-    userNotes      Note[]
-    userStatus     UserStatus?
+  id                 String              @id
+  firstName          String
+  lastName           String
+  occupation         String
+  major              String
+  nativeLanguage     String
+  flowId             String?             @unique
+  createdAt          DateTime            @default(now())
+  auth               Auth?               @relation(fields: [id], references: [id])
+  flow               Flow?               @relation(fields: [flowId], references: [id])
+  userInterests      Interest[]          @relation("UserInterests")
+  userTopics         Topic[]             @relation("UserTopics")
+  reports            Report[]
+  userWords          Word[]              @relation("UserWords")
+  userNotes          Note[]
+  userStatus         UserStatus?
+  writingSubmissions WritingSubmission[]
 }
 
 model Interest {
-    id            String @id @default(uuid())
-    name          String
-    userInterests User[] @relation("UserInterests")
+  id            String @id @default(uuid())
+  name          String
+  userInterests User[] @relation("UserInterests")
 }
 
 model Topic {
-    id         String   @id @default(uuid())
-    field      String
-    topicName  String
-    level      Int
-    userTopics User[]   @relation("UserTopics")
-    reports    Report[]
+  id                 String              @id @default(uuid())
+  field              String
+  topicName          String
+  level              Int
+  userTopics         User[]              @relation("UserTopics")
+  reports            Report[]
+  writingSubmissions WritingSubmission[]
 
   @@unique([field, topicName])
 }
@@ -101,7 +104,7 @@ model Comment {
 }
 
 model Word {
-  id        String   @id @default(uuid()) 
+  id        String   @id @default(uuid())
   word      String
   meaning   String
   example   String
@@ -110,17 +113,38 @@ model Word {
 }
 
 model Note {
-    id      String   @id @default(uuid()) 
-    userId  String   
-    heading String
-    content String
-    date    DateTime @default(now())
-    user    User     @relation(fields: [userId], references: [id])
+  id      String   @id @default(uuid())
+  userId  String
+  heading String
+  content String
+  date    DateTime @default(now())
+  user    User     @relation(fields: [userId], references: [id])
+}
+
+model WritingSubmission {
+  id               String   @id @default(uuid())
+  questionText     String
+  writtenTextHtml  String // To store HTML from Tiptap
+  writtenTextPlain String? // Optional: for plain text version
+  durationSeconds  Int
+  practiceDate     DateTime
+  wordCount        Int?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  topicId String?
+  topic   Topic?  @relation(fields: [topicId], references: [id])
+
+  taskId String? // Optional: generic task identifier
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model UserStatus {
-  id        String   @id @default(uuid()) 
-  userId    String   @unique 
+  id        String   @id @default(uuid())
+  userId    String   @unique
   speaking  Int      @default(0)
   writing   Int      @default(0)
   listening Int      @default(0)

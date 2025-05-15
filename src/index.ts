@@ -16,6 +16,7 @@ import wordRoutes from './routes/wordRoutes.js';
 import speakingRoutes from './routes/speakingRoutes.js';
 import userStatusRoutes from './routes/userStatusRoutes.js';
 import flowRoutes from './routes/flowRoutes.js';
+import writingRoutes from './routes/writingRoutes.js';
 
 dotenv.config({ path: path.resolve('.env') });
 
@@ -58,6 +59,7 @@ app.use('/word', wordRoutes);
 app.use('/speaking', speakingRoutes);
 app.use('/status', userStatusRoutes);
 app.use('/flow', flowRoutes);
+app.use('/writing', writingRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

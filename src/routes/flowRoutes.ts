@@ -8,7 +8,7 @@ const router = Router();
 router.use(authMiddleware);
 
 // Flow API endpoints
-router.get('/tasks/flow', getTaskFlow);
+router.get('/tasks/current', getTaskFlow); // Match frontend API call
 router.post('/tasks/flow/next', nextTask);
 
 export default router;
