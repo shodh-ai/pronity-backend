@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import UserDTO from "../models/UserDTO.js";
+import UserDTO from "../models/userDTO.js";
 
 export const getUserById = async (userId: string): Promise<UserDTO | null> => {
     const prisma = new PrismaClient();

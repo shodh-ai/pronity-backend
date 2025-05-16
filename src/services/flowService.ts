@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { Response } from 'express';
-import UserDTO from '../models/UserDTO.js';
+import UserDTO from '../models/userDTO.js';
 import generateMockFlow from '../utils/mockFlowGenerator.js';
 import FlowDTO from '../models/FlowDTO.js';
 import { Components } from '../types/FlowPayload.js';

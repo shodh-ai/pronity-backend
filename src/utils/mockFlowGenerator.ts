@@ -1,4 +1,4 @@
-import UserDTO from "../models/UserDTO.js";
+import UserDTO from "../models/userDTO.js";
 import { Components } from "../types/FlowPayload.js";
 
 export default function generateMockFlow(user: UserDTO) : Components[] {

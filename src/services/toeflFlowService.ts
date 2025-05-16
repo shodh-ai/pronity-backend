@@ -101,7 +101,7 @@ export const getUserActiveFlow = async (userId: string): Promise<TaskFlow | null
       sequence: flow.flowComponents.map(fc => fc.componentId),
       currentPosition: flow.lastCompleted,
       isActive: true,
-      createdAt: flow.flowComponents[0]?.component.createdAt || new Date(),
+      createdAt: new Date(),
       updatedAt: new Date()
     };
   } catch (error) {
@@ -124,7 +124,7 @@ export const createNewFlow = async (userId: string, res: Response) => {
     console.log('Creating new flow for user ID:', userId);
     
     // Get user with interests
-    const user = await prisma.user.findUnique({
+    let user = await prisma.user.findUnique({ // Changed const to let
       where: { id: userId },
       include: { userInterests: true }
     });
@@ -145,7 +145,8 @@ export const createNewFlow = async (userId: string, res: Response) => {
             nativeLanguage: 'English'
           }
         });
-        console.log('Created test user:', newUser.id);
+        user = { ...newUser, userInterests: [] }; // Assign the newly created user with empty interests
+        console.log('Created test user:', user.id);
       } catch (createError) {
         console.error('Failed to create test user:', createError);
         return res.status(404).json({ message: 'User not found and could not be created' });

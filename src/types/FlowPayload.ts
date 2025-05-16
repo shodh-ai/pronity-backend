@@ -1,6 +1,6 @@
 export interface Components {
     type: string;
     level: number;
-    content?: string;
+    content?: string | null;
     id?: string;
 }
