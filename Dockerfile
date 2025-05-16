@@ -7,5 +7,8 @@ WORKDIR /workspace
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
+RUN npm run build
 RUN npx prisma generate
 RUN chmod +x entrypoint.sh
+
+ENTRYPOINT ["./entrypoint.sh"]
