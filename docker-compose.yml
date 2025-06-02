@@ -14,6 +14,7 @@ services:
       PGHOST: db
       PGPORT: 5432
       DATABASE_URL: postgres://postgres:postgres@db:5432/pronity
+      BACKEND_PORT: 8000
     ports:
       - "8000:8000"
     command: [ "sh", "-c", "./entrypoint.sh" ]
