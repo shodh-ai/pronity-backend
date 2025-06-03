@@ -12,6 +12,3 @@ npx prisma db push
 
 npm run build
 npm run start
-
-# Start the app
-npm run start

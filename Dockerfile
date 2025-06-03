@@ -4,11 +4,12 @@ RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/ap
 
 WORKDIR /workspace
 
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY package.json ./
+RUN npm install
 COPY . .
 RUN npx prisma generate
 RUN npm run build
-RUN npm prune --productionRUN chmod +x entrypoint.sh
+RUN npm prune --production
+RUN chmod +x entrypoint.sh
 
 ENTRYPOINT ["./entrypoint.sh"]
