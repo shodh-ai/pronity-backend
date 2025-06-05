@@ -1,5 +1,6 @@
 import express from 'express';
-import { getUserProfile, getUserSkills } from '../controllers/apiController.js';
+import { getUserProfile, getUserSkills, startAiSessionController } from '../controllers/apiController.js';
+import { authMiddleware } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
@@ -22,5 +23,8 @@ router.get('/users/:userId', (req, res) => {
 router.get('/users/:userId/skills', (req, res) => {
     getUserSkills(req, res);
 });
+
+// Start an AI interaction session
+router.post('/start-ai-session', authMiddleware, startAiSessionController);
 
 export default router;

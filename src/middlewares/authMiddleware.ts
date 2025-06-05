@@ -9,7 +9,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
     }
     try {
         const decodedToken = verifyToken(token) as { userId: string };
-        req.user = { userId: decodedToken.userId };
+        req.user = { userId: decodedToken.userId, token: token };
         next();
     } catch (error) {
         res.status(401).json({ message: 'Unauthorized' });
