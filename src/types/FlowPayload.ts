@@ -1,6 +1,7 @@
 export interface Components {
+    id: string;
     type: string;
-    level: number;
-    content?: string;
-    id?: string;
+    level: string;
+    task: string;
+    topic: string;
 }

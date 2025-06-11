@@ -6,9 +6,10 @@ import {
 } from "../services/userService.js";
 
 import {
-  generateFlow as generateFlowService,
+  saveFlow as saveFlowService,
   getFlow as getFlowService,
   getNextFlow as getNextFlowService,
+  showNextFlow as showNextFlowService,
 } from "../services/flowService.js";
 
 import {
@@ -33,7 +34,10 @@ import {
   learnNewWord as learnNewWordService,
 } from "../services/wordService.js";
 
-export const getUserInfo = async (req: Request, res: Response) => {
+export const getUserInfo = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const userId = req.user?.userId;
   if (!userId) {
     res.status(401).json({ message: "Unauthorized" });
@@ -47,23 +51,24 @@ export const getUserInfo = async (req: Request, res: Response) => {
   res.status(200).json({ message: "User info retrieved successfully", user });
 };
 
-export const fill_details = async (req: Request, res: Response) => {
+export const fill_details = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const userId = req.user?.userId;
   if (!userId) {
     res.status(401).json({ message: "Unauthorized" });
     return;
   }
-  const { firstName, lastName, occupation, major, nativeLanguage, interests } =
-    req.body;
+  const { name, goal, feeling, confidence, analysis } = req.body;
   try {
     const user = await addUserDetails(
       userId,
-      firstName,
-      lastName,
-      occupation,
-      major,
-      nativeLanguage,
-      interests
+      name,
+      goal,
+      feeling,
+      confidence,
+      analysis
     );
     res.status(200).json({ message: "User details added successfully", user });
   } catch (error) {
@@ -74,31 +79,32 @@ export const fill_details = async (req: Request, res: Response) => {
   }
 };
 
-export const generate_flow = async (req: Request, res: Response) => {
+export const save_flow = async (req: Request, res: Response): Promise<void> => {
   const userId = req.user?.userId;
   if (!userId) {
     res.status(401).json({ message: "Unauthorized" });
     return;
   }
-  try {
-    const user = await getUserByIdService(userId);
-    if (!user) {
-      res.status(404).json({ message: "User not found" });
-      return;
-    }
-    const updatedUser = await generateFlowService(user);
+  const { flowElements } = req.body;
+  if (!Array.isArray(flowElements)) {
     res
-      .status(200)
-      .json({ message: "Flow generated successfully", user: updatedUser });
+      .status(400)
+      .json({ message: "Invalid request body. Expected an array." });
+    return;
+  }
+
+  try {
+    await saveFlowService(userId, flowElements);
+    res.status(200).json({ message: "Flow saved successfully" });
   } catch (error) {
-    console.error("Error generating flow:", error);
+    console.error("Error saving flow:", error);
     res
       .status(500)
-      .json({ message: "Internal server error during generating flow" });
+      .json({ message: "Internal server error during saving flow" });
   }
 };
 
-export const getFlow = async (req: Request, res: Response) => {
+export const getFlow = async (req: Request, res: Response): Promise<void> => {
   const userId = req.user?.userId;
   if (!userId) {
     res.status(401).json({ message: "Unauthorized" });
@@ -120,32 +126,72 @@ export const getFlow = async (req: Request, res: Response) => {
   }
 };
 
-export const getNextFlow = async (req: Request, res: Response) => {
+export const getNextFlow = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const userId = req.user?.userId;
   if (!userId) {
     res.status(401).json({ message: "Unauthorized" });
     return;
   }
+
   try {
     const user = await getUserByIdService(userId);
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
     }
-    const component = await getNextFlowService(user);
+    const nextFlow = await getNextFlowService(user);
     res.status(200).json({
-      message: "Next flow component retrieved successfully",
-      component,
+      message: "Next flow element retrieved successfully",
+      flow: nextFlow,
     });
   } catch (error) {
-    console.error("Error getting next flow component:", error);
-    res.status(500).json({
-      message: "Internal server error during getting next flow component",
-    });
+    if (error instanceof Error && error.message === "End of flow.") {
+      res.status(404).json({ message: "End of flow." });
+    } else {
+      console.error(error);
+      res.status(500).json({ message: "Error getting next flow element" });
+    }
   }
 };
 
-export const generateUserTopics = async (req: Request, res: Response) => {
+export const show_next_flow = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const userId = req.user?.userId;
+  if (!userId) {
+    res.status(401).json({ message: "Unauthorized" });
+    return;
+  }
+
+  try {
+    const user = await getUserByIdService(userId);
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+    const nextFlow = await showNextFlowService(user);
+    res.status(200).json({
+      message: "Next flow element retrieved successfully",
+      flow: nextFlow,
+    });
+  } catch (error) {
+    if (error instanceof Error && error.message === "End of flow.") {
+      res.status(404).json({ message: "End of flow." });
+    } else {
+      console.error(error);
+      res.status(500).json({ message: "Error getting next flow element" });
+    }
+  }
+};
+
+export const generateUserTopics = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const userId = req.user?.userId;
   if (!userId) {
     res.status(401).json({ message: "Unauthorized" });
@@ -169,7 +215,10 @@ export const generateUserTopics = async (req: Request, res: Response) => {
   }
 };
 
-export const getUserTopics = async (req: Request, res: Response) => {
+export const getUserTopics = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const userId = req.user?.userId;
   if (!userId) {
     res.status(401).json({ message: "Unauthorized" });
@@ -193,7 +242,10 @@ export const getUserTopics = async (req: Request, res: Response) => {
   }
 };
 
-export const getPractiseTopic = async (req: Request, res: Response) => {
+export const getPractiseTopic = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const userId = req.user?.userId;
   if (!userId) {
     res.status(401).json({ message: "Unauthorized" });
@@ -217,7 +269,7 @@ export const getPractiseTopic = async (req: Request, res: Response) => {
   }
 };
 
-export const addReport = async (req: Request, res: Response) => {
+export const addReport = async (req: Request, res: Response): Promise<void> => {
   const userId = req.user?.userId;
   if (!userId) {
     res.status(401).json({ message: "Unauthorized" });
@@ -239,7 +291,10 @@ export const addReport = async (req: Request, res: Response) => {
   }
 };
 
-export const getReports = async (req: Request, res: Response) => {
+export const getReports = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const userId = req.user?.userId;
   if (!userId) {
     res.status(401).json({ message: "Unauthorized" });
