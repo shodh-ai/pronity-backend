@@ -15,80 +15,43 @@ model Auth {
   user     User?
 }
 
-model Flow {
-  id             String          @id @default(uuid())
-  lastCompleted  Int             @default(0)
-  flowComponents FlowComponent[]
-  user           User?
-}
-
-model Component {
-  id             String          @id @default(uuid())
-  type           String
-  level          Int
-  content        String?
-  flowComponents FlowComponent[]
-}
-
-model FlowComponent {
-  id          String    @id @default(uuid())
-  flowId      String
-  componentId String
-  order       Int
-  flow        Flow      @relation(fields: [flowId], references: [id])
-  component   Component @relation(fields: [componentId], references: [id])
-
-  @@unique([flowId, componentId, order])
+model FlowElement {
+    id     String @id @default(uuid()) @db.Uuid
+    userId String @db.Uuid
+    type   String
+    level  String
+    topic  String
+    task   String
+    order  Int
+    user   User   @relation(fields: [userId], references: [id])
 }
 
 model User {
-  id                 String              @id
-  firstName          String
-  lastName           String
-  occupation         String
-  major              String
-  nativeLanguage     String
-  flowId             String?             @unique
-  createdAt          DateTime            @default(now())
-  auth               Auth?               @relation(fields: [id], references: [id])
-  flow               Flow?               @relation(fields: [flowId], references: [id])
-  userInterests      Interest[]          @relation("UserInterests")
-  userTopics         Topic[]             @relation("UserTopics")
-  reports            Report[]
-  userWords          Word[]              @relation("UserWords")
-  userNotes          Note[]
-  userStatus         UserStatus?
-  writingSubmissions WritingSubmission[]
-}
-
-model Interest {
-  id            String @id @default(uuid())
-  name          String
-  userInterests User[] @relation("UserInterests")
-}
-
-model Topic {
-  id                 String              @id @default(uuid())
-  field              String
-  topicName          String
-  level              Int
-  userTopics         User[]              @relation("UserTopics")
-  reports            Report[]
-  writingSubmissions WritingSubmission[]
-
-  @@unique([field, topicName])
+    id           String        @id @db.Uuid
+    name         String
+    goal         String
+    feeling      String
+    confidence   String
+    analysis     String
+    flowId       String?       @unique @db.Uuid
+    currentOrder Int
+    createdAt    DateTime      @default(now())
+    auth         Auth?         @relation(fields: [id], references: [id])
+    reports      Report[]
+    flowElements FlowElement[]
+    userWords    Word[]        @relation("UserWords")
+    userNotes    Note[]
 }
 
 model Report {
-  id       String    @id @default(uuid())
-  topicId  String
-  userId   String
-  date     DateTime  @default(now())
-  type     String
-  userText String
-  comments Comment[]
-  topic    Topic     @relation(fields: [topicId], references: [id])
-  user     User      @relation(fields: [userId], references: [id])
+    id       String    @id @default(uuid()) @db.Uuid
+    topicId  String    @db.Uuid
+    userId   String    @db.Uuid
+    date     DateTime  @default(now())
+    type     String
+    userText String
+    user     User      @relation(fields: [userId], references: [id])
+    comments Comment[]
 }
 
 model Comment {

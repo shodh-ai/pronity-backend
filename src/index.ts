@@ -5,7 +5,7 @@ import cors from 'cors';
 import fileUpload from 'express-fileupload';
 import { fileURLToPath } from 'url';
 
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
 import dbInfoRouter from './routes/dbInfo.js';
 import authRoutes from './routes/authRoutes.js';
@@ -19,7 +19,7 @@ import flowRoutes from './routes/flowRoutes.js';
 import writingRoutes from './routes/writingRoutes.js';
 import apiRoutes from './routes/apiRoutes.js';
 
-dotenv.config({ path: path.resolve('.env') });
+dotenv.config({ path: path.resolve(".env") });
 
 // Get the current file path in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -64,5 +64,5 @@ app.use('/writing', writingRoutes);
 app.use('/api', apiRoutes);
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
