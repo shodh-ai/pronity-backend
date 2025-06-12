@@ -1,17 +1,18 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Auth {
-    id       String @id @default(uuid()) @db.Uuid
-    email    String @unique
-    password String
-    user     User?
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
+  user     User?
 }
 
 model FlowElement {
@@ -54,31 +55,62 @@ model Report {
 }
 
 model Comment {
-    id         String   @id @default(uuid()) @db.Uuid
-    reportId   String   @db.Uuid
-    startIndex Int
-    endIndex   Int
-    wrongText  String
-    rightText  String
-    info       String
-    date       DateTime @default(now())
-    report     Report   @relation(fields: [reportId], references: [id])
+  id         String   @id @default(uuid())
+  reportId   String
+  startIndex Int
+  endIndex   Int
+  wrongText  String
+  rightText  String
+  info       String
+  date       DateTime @default(now())
+  report     Report   @relation(fields: [reportId], references: [id])
 }
 
 model Word {
-    id        String   @id @default(uuid()) @db.Uuid
-    word      String
-    meaning   String
-    example   String
-    date      DateTime @default(now())
-    userWords User[]   @relation("UserWords")
+  id        String   @id @default(uuid())
+  word      String
+  meaning   String
+  example   String
+  date      DateTime @default(now())
+  userWords User[]   @relation("UserWords")
 }
 
 model Note {
-    id      String   @id @default(uuid()) @db.Uuid
-    userId  String   @db.Uuid
-    heading String
-    content String
-    date    DateTime @default(now())
-    user    User     @relation(fields: [userId], references: [id])
+  id      String   @id @default(uuid())
+  userId  String
+  heading String
+  content String
+  date    DateTime @default(now())
+  user    User     @relation(fields: [userId], references: [id])
+}
+
+model WritingSubmission {
+  id               String   @id @default(uuid())
+  questionText     String
+  writtenTextHtml  String // To store HTML from Tiptap
+  writtenTextPlain String? // Optional: for plain text version
+  durationSeconds  Int
+  practiceDate     DateTime
+  wordCount        Int?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  topicId String?
+  topic   Topic?  @relation(fields: [topicId], references: [id])
+
+  taskId String? // Optional: generic task identifier
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserStatus {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  speaking  Int      @default(0)
+  writing   Int      @default(0)
+  listening Int      @default(0)
+  updatedAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
 }

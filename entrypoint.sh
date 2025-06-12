@@ -10,5 +10,5 @@ done
 # Push schema to DB
 npx prisma db push
 
-# Start the app
-npm run dev
+npm run build
+npm run start

@@ -1,5 +1,5 @@
 import TopicDTO from "../models/TopicDTO.js";
-import UserDTO from "../models/UserDTO.js";
+import UserDTO from "../models/userDTO.js";
 import { PrismaClient } from "@prisma/client";
 import generateMockTopics from "../utils/mockTopicGenerator.js";
 

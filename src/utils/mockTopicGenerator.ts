@@ -1,5 +1,5 @@
 import TopicDTO from "../models/TopicDTO.js";
-import UserDTO from "../models/UserDTO.js";
+import UserDTO from "../models/userDTO.js";
 
 export default function generateMockTopics(user: UserDTO, allTopics: TopicDTO[]) {
     return [{

@@ -10,6 +10,51 @@ interface FlowElementPayload {
   level: string;
 }
 
+// Interface for task flow structure
+interface TaskFlow {
+  flowId: string;
+  userId: string;
+  sequence: string[];
+  currentPosition: number;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Interface for task structure
+interface Task {
+  taskId: string;
+  title: string;
+  description: string;
+  taskType: string;
+  difficultyLevel: number;
+  topicId: string;
+  progress?: {
+    completed: boolean;
+    completedAt: string | null;
+    score: number | null;
+  };
+}
+
+// Interface for topic structure
+interface Topic {
+  topicId: string;
+  name: string;
+  description: string;
+  isExamTopic?: boolean;
+}
+
+// Interface for vocabulary word structure
+interface VocabularyWord {
+  wordId: string;
+  word: string;
+  definition: string;
+  exampleSentence: string;
+  difficultyLevel: number;
+  topicId: string;
+  topic?: Topic;
+}
+
 export const generateFlow = async (user: UserDTO) => {
   const prisma = new PrismaClient();
 };
@@ -78,7 +123,6 @@ export const getFlow = async (user: UserDTO): Promise<FlowDTO> => {
       task: element.task,
       topic: element.topic,
     }));
-
     return {
       last_studied: user.currentOrder,
       components: components,

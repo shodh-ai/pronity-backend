@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import UserDTO from "../models/UserDTO.js";
+import UserDTO from "../models/userDTO.js";
 import ReportPayload from "../types/ReportPayload.js";
 import ReportDTO from "../models/ReportDTO.js";
 

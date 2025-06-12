@@ -323,3 +323,60 @@ http://localhost:8000
 * **URL:** `/user/learn-new-word`
 * **Method:** GET
 * **Auth:** Bearer Token
+
+---
+
+## Flow
+
+### Get Current Task Flow
+
+* **URL:** `/flow/tasks/flow`
+* **Method:** GET
+* **Auth:** Bearer Token
+* **Response:**
+
+```json
+{
+  "currentPosition": 0,
+  "totalTasks": 4,
+  "currentTask": {
+    "taskId": "comp1",
+    "title": "Reading Practice",
+    "description": "Reading practice for Computer Science",
+    "taskType": "reading",
+    "difficultyLevel": 1,
+    "topic": {
+      "topicId": "topic1",
+      "name": "Computer Science",
+      "description": "Technology",
+      "isExamTopic": false
+    }
+  }
+}
+```
+
+### Move to Next Task
+
+* **URL:** `/flow/tasks/flow/next`
+* **Method:** POST
+* **Auth:** Bearer Token
+* **Response:**
+
+```json
+{
+  "currentPosition": 1,
+  "totalTasks": 4,
+  "currentTask": {
+    "taskId": "comp2",
+    "title": "Writing Practice",
+    "description": "Writing practice for Mathematics",
+    "taskType": "writing",
+    "difficultyLevel": 2,
+    "topic": {
+      "topicId": "topic2",
+      "name": "Mathematics",
+      "description": "Science",
+      "isExamTopic": false
+    }
+  }
+}
