@@ -16,7 +16,8 @@ export const generateFlow = async (user: UserDTO) => {
 
 export const saveFlow = async (
   userId: string,
-  flowElements: FlowElementPayload[]
+  flowElements: FlowElementPayload[],
+  analysis: string
 ) => {
   const prisma = new PrismaClient();
   try {
@@ -44,7 +45,7 @@ export const saveFlow = async (
 
       await tx.user.update({
         where: { id: userId },
-        data: { currentOrder: 0 },
+        data: { currentOrder: 0, analysis: analysis },
       });
     });
   } catch (error) {

@@ -36,8 +36,7 @@ export const addUserDetails = async (
   name: string,
   goal: string,
   feeling: string,
-  confidence: string,
-  analysis: string
+  confidence: string
 ): Promise<UserDTO> => {
   const prisma = new PrismaClient();
   try {
@@ -48,7 +47,7 @@ export const addUserDetails = async (
         goal,
         feeling,
         confidence,
-        analysis,
+        analysis: "",
         currentOrder: 0,
       },
     });

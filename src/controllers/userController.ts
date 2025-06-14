@@ -12,11 +12,6 @@ import {
   showNextFlow as showNextFlowService,
 } from "../services/flowService.js";
 
-import {
-  generateUserTopics as generateUserTopicsService,
-  getUserTopics as getUserTopicsService,
-  getPractiseTopic as getPractiseTopicService,
-} from "../services/topicService.js";
 
 import {
   addReport as addReportService,
@@ -60,16 +55,9 @@ export const fill_details = async (
     res.status(401).json({ message: "Unauthorized" });
     return;
   }
-  const { name, goal, feeling, confidence, analysis } = req.body;
+  const { name, goal, feeling, confidence } = req.body;
   try {
-    const user = await addUserDetails(
-      userId,
-      name,
-      goal,
-      feeling,
-      confidence,
-      analysis
-    );
+    const user = await addUserDetails(userId, name, goal, feeling, confidence);
     res.status(200).json({ message: "User details added successfully", user });
   } catch (error) {
     console.error("Error adding user details:", error);
@@ -85,7 +73,7 @@ export const save_flow = async (req: Request, res: Response): Promise<void> => {
     res.status(401).json({ message: "Unauthorized" });
     return;
   }
-  const { flowElements } = req.body;
+  const { flowElements, analysis } = req.body;
   if (!Array.isArray(flowElements)) {
     res
       .status(400)
@@ -94,7 +82,7 @@ export const save_flow = async (req: Request, res: Response): Promise<void> => {
   }
 
   try {
-    await saveFlowService(userId, flowElements);
+    await saveFlowService(userId, flowElements, analysis);
     res.status(200).json({ message: "Flow saved successfully" });
   } catch (error) {
     console.error("Error saving flow:", error);
@@ -185,87 +173,6 @@ export const show_next_flow = async (
       console.error(error);
       res.status(500).json({ message: "Error getting next flow element" });
     }
-  }
-};
-
-export const generateUserTopics = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  const userId = req.user?.userId;
-  if (!userId) {
-    res.status(401).json({ message: "Unauthorized" });
-    return;
-  }
-  try {
-    const user = await getUserByIdService(userId);
-    if (!user) {
-      res.status(404).json({ message: "User not found" });
-      return;
-    }
-    const topics = await generateUserTopicsService(user);
-    res
-      .status(200)
-      .json({ message: "User topics generated successfully", topics });
-  } catch (error) {
-    console.error("Error generating user topics:", error);
-    res
-      .status(500)
-      .json({ message: "Internal server error during generating user topics" });
-  }
-};
-
-export const getUserTopics = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  const userId = req.user?.userId;
-  if (!userId) {
-    res.status(401).json({ message: "Unauthorized" });
-    return;
-  }
-  try {
-    const user = await getUserByIdService(userId);
-    if (!user) {
-      res.status(404).json({ message: "User not found" });
-      return;
-    }
-    const topics = await getUserTopicsService(user);
-    res
-      .status(200)
-      .json({ message: "User topics retrieved successfully", topics });
-  } catch (error) {
-    console.error("Error getting user topics:", error);
-    res
-      .status(500)
-      .json({ message: "Internal server error during getting user topics" });
-  }
-};
-
-export const getPractiseTopic = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  const userId = req.user?.userId;
-  if (!userId) {
-    res.status(401).json({ message: "Unauthorized" });
-    return;
-  }
-  try {
-    const user = await getUserByIdService(userId);
-    if (!user) {
-      res.status(404).json({ message: "User not found" });
-      return;
-    }
-    const topic = await getPractiseTopicService(user);
-    res
-      .status(200)
-      .json({ message: "Practise topic retrieved successfully", topic });
-  } catch (error) {
-    console.error("Error getting practise topic:", error);
-    res
-      .status(500)
-      .json({ message: "Internal server error during getting practise topic" });
   }
 };
 

@@ -2,15 +2,12 @@ import { Router } from "express";
 
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import {
-  getUserInfo,
   fill_details,
+  getUserInfo,
   save_flow,
   getFlow,
   getNextFlow,
   show_next_flow,
-  generateUserTopics,
-  getUserTopics,
-  getPractiseTopic,
   addReport,
   getReports,
   getReportById,
@@ -22,15 +19,12 @@ import {
 
 const router = Router();
 
-router.get("/info", authMiddleware, getUserInfo);
 router.post("/fill-details", authMiddleware, fill_details);
+router.get("/info", authMiddleware, getUserInfo);
 router.post("/save-flow", authMiddleware, save_flow);
 router.get("/show-next-flow", authMiddleware, show_next_flow);
 router.get("/get-flow", authMiddleware, getFlow);
 router.get("/get-next-flow", authMiddleware, getNextFlow);
-router.get("/generate-user-topics", authMiddleware, generateUserTopics);
-router.get("/get-user-topics", authMiddleware, getUserTopics);
-router.get("/get-practise-topic", authMiddleware, getPractiseTopic);
 router.post("/add-report", authMiddleware, addReport);
 router.get("/get-reports", authMiddleware, getReports);
 router.get("/get-report-by-id", authMiddleware, getReportById);

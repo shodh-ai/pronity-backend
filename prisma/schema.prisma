@@ -15,14 +15,16 @@ model Auth {
 }
 
 model FlowElement {
-    id     String @id @default(uuid()) @db.Uuid
-    userId String @db.Uuid
-    type   String
-    level  String
-    topic  String
-    task   String
-    order  Int
-    user   User   @relation(fields: [userId], references: [id])
+    id       String  @id @default(uuid()) @db.Uuid
+    userId   String  @db.Uuid
+    reportId String? @db.Uuid
+    type     String
+    level    String
+    topic    String
+    task     String
+    order    Int
+    user     User    @relation(fields: [userId], references: [id])
+    report   Report?
 }
 
 model User {
@@ -31,26 +33,27 @@ model User {
     goal         String
     feeling      String
     confidence   String
-    analysis     String
-    flowId       String?       @unique @db.Uuid
+    analysis     String?
     currentOrder Int
+    flowId       String?       @unique @db.Uuid
     createdAt    DateTime      @default(now())
-    auth         Auth?         @relation(fields: [id], references: [id])
-    reports      Report[]
+    auth         Auth          @relation(fields: [id], references: [id])
     flowElements FlowElement[]
+    reports      Report[]
     userWords    Word[]        @relation("UserWords")
     userNotes    Note[]
 }
 
 model Report {
-    id       String    @id @default(uuid()) @db.Uuid
-    topicId  String    @db.Uuid
-    userId   String    @db.Uuid
-    date     DateTime  @default(now())
-    type     String
-    userText String
-    user     User      @relation(fields: [userId], references: [id])
-    comments Comment[]
+    id          String      @id @default(uuid()) @db.Uuid
+    userId      String      @db.Uuid
+    flowId      String      @unique @db.Uuid
+    date        DateTime    @default(now())
+    userText    String
+    mainComment String
+    user        User        @relation(fields: [userId], references: [id])
+    flow        FlowElement @relation(fields: [flowId], references: [id], onDelete: Cascade)
+    comments    Comment[]
 }
 
 model Comment {

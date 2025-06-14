@@ -7,11 +7,9 @@ import { Request, Response } from "express";
 
 import dbInfoRouter from "./routes/dbInfo.js";
 import authRoutes from "./routes/authRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
-import interestRoutes from "./routes/interestRoutes.js";
-import topicRoutes from "./routes/topicRoutes.js";
-import wordRoutes from "./routes/wordRoutes.js";
 import apiRoutes from "./routes/apiRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import wordRoutes from "./routes/wordRoutes.js";
 
 dotenv.config({ path: path.resolve(".env") });
 
@@ -26,11 +24,9 @@ app.get("/", (req: Request, res: Response) => {
 });
 app.use("/dbInfo", dbInfoRouter);
 app.use("/auth", authRoutes);
-app.use("/user", userRoutes);
-app.use("/interest", interestRoutes);
-app.use("/topic", topicRoutes);
-app.use("/word", wordRoutes);
 app.use("/api", apiRoutes);
+app.use("/user", userRoutes);
+app.use("/word", wordRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
