@@ -14,6 +14,8 @@ services:
       PGHOST: db
       PGPORT: 5432
       DATABASE_URL: postgres://postgres:postgres@db:5432/pronity
+      WEBRTC_TOKEN_SERVICE_URL: http://host.docker.internal:3002/api/token
+      LIVEKIT_SERVICE_URL: http://host.docker.internal:5005/run-agent
     ports:
       - "8000:8000"
     command: [ "sh", "-c", "./entrypoint.sh" ]
